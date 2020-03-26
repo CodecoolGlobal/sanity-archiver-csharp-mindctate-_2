@@ -12,15 +12,18 @@ namespace SanityArchiver.DesktopUI.ViewModels
     public class MainWindowViewModel
     {
         private static List<FileInfo> _files;
-        private static List<string> _directories;
-        private static List<string> _drivers;
+        private static List<string> _directories = new List<string>();
+        private static List<string> _drives = new List<string>();
+        private string _fullPath;
 
-        public List<string> Drivers
+        public string FullPath { get; set; }
+
+        public List<string> Drives
         {
-            get => _drivers;
+            get => _drives;
             set
             {
-                _drivers = value;
+                _drives = value;
             }
         }
 
@@ -34,17 +37,34 @@ namespace SanityArchiver.DesktopUI.ViewModels
         {
             foreach (var drive in Directory.GetLogicalDrives())
             {
-                Drivers.Add(drive);
+                Drives.Add(drive);
             }
         }
 
-        public void GetDirectories(string fullPath)
+        public List<string> GetDirectories(string fullPath)
         {
-            var dirs = Directory.GetDirectories(fullPath);
-
-            if (dirs.Length > 0)
+            try
             {
-                _directories.AddRange(dirs);
+                try
+                {
+                    var dirs = Directory.GetDirectories(fullPath);
+
+                    if (dirs.Length > 0)
+                    {
+                        _directories.AddRange(dirs);
+                    }
+
+                    return dirs.ToList();
+                }
+                catch (UnauthorizedAccessException e)
+                {
+                }
+
+                return null;
+            }
+            catch (IOException e)
+            {
+                return null;
             }
         }
 
