@@ -15,7 +15,18 @@ namespace SanityArchiver.DesktopUI.ViewModels
         private static List<string> _directories;
         private static List<string> _drivers;
 
+        public List<string> Drivers
+        {
+            get => _drivers;
+            set
+            {
+                _drivers = value;
+            }
+        }
+
+#pragma warning disable SA1201 // Elements should appear in the correct order
         public MainWindowViewModel()
+#pragma warning restore SA1201 // Elements should appear in the correct order
         {
         }
 
@@ -23,7 +34,7 @@ namespace SanityArchiver.DesktopUI.ViewModels
         {
             foreach (var drive in Directory.GetLogicalDrives())
             {
-                _drivers.Add(drive);
+                Drivers.Add(drive);
             }
         }
 

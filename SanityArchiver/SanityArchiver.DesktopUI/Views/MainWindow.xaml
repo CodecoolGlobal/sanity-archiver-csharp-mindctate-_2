@@ -23,7 +23,7 @@
                         <Setter.Value>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image MaxWidth="24" MaxHeight="24" Source="Images/HardDrive.png" />
+                                    <Image MaxWidth="24" MaxHeight="24" Source="pack://SanityArchiver:,,,/Images/HardDrive.png" />
                                     <TextBlock VerticalAlignment="Center" Text="Drive" />
                                 </StackPanel>
                             </DataTemplate>
