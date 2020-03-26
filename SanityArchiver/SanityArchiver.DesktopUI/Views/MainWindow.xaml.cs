@@ -14,6 +14,14 @@ namespace SanityArchiver.DesktopUI.Views
         public MainWindow()
         {
             InitializeComponent();
+
+           // _vm = new MainWindowViewModel();
+           // DataContext = _vm;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+           // _vm.GetDrives();
         }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SanityArchiver.DesktopUI"
         mc:Ignorable="d"
-        Title="Sanity Archiver" Height="450" Width="800">
+        Title="Sanity Archiver" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -16,6 +16,22 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="9*" />
         </Grid.RowDefinitions>
-        
+        <TreeView Grid.Row="1" x:Name="FolderView">
+            <TreeView.Resources>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image MaxWidth="24" MaxHeight="24" Source="Images/HardDrive.png" />
+                                    <TextBlock VerticalAlignment="Center" Text="Drive" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TreeView.Resources>
+        </TreeView>
+
     </Grid>
 </Window>

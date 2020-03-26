@@ -26,10 +26,10 @@ namespace SanityArchiver.Application.Models
         {
             var dirs = Directory.GetDirectories(fullPath);
 
-            if (dirs.Length > 0)
+           /* if (dirs.Length > 0)
             {
                 _directories.AddRange(dirs);
-            }
+            }*/
         }
     }
 }
