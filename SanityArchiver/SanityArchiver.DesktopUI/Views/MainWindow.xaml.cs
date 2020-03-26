@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using SanityArchiver.Application.Models;
 
 namespace SanityArchiver.DesktopUI.Views
 {
