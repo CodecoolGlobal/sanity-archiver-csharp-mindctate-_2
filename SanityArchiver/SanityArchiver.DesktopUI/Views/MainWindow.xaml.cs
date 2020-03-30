@@ -2,9 +2,9 @@
 using System.Windows.Controls;
 using System.Collections.Generic;
 using System.IO;
-
-using SanityArchiver.Application.Models;
+using System.Windows.Input;
 using SanityArchiver.DesktopUI.ViewModels;
+using SanityArchiver.Application.Models;
 
 namespace SanityArchiver.DesktopUI.Views
 {
@@ -39,12 +39,12 @@ namespace SanityArchiver.DesktopUI.Views
                 };
 
                 item.Items.Add(null);
-                item.Expanded += Folder_Expanded;
+                item.Expanded += FolderExpanded;
                 FolderView.Items.Add(item);
             }
         }
 
-        private void Folder_Expanded(object sender, RoutedEventArgs e)
+        private void FolderExpanded(object sender, RoutedEventArgs e)
         {
             var item = (TreeViewItem)sender;
             if (item.Items.Count != 1 || item.Items[0] != null)
@@ -67,11 +67,43 @@ namespace SanityArchiver.DesktopUI.Views
 
                         subItem.Items.Add(null);
 
-                        subItem.Expanded += Folder_Expanded;
+                        subItem.Expanded += FolderExpanded;
 
                         item.Items.Add(subItem);
                     });
             }
+        }
+
+        private void GetItemTag(object sender, RoutedEventArgs e)
+        {
+            TreeViewItem selectedItem = (TreeViewItem)FolderView.SelectedItem;
+
+            _vm.CurrentPath = selectedItem.Tag.ToString();
+        }
+
+        private void OnItemMouseDoubleClick(object sender, MouseButtonEventArgs args)
+        {
+            if (sender is TreeViewItem)
+            {
+                if (!((TreeViewItem)sender).IsSelected)
+                {
+                    return;
+                }
+            }
+
+            string[] files = _vm.GetFileNames(_vm.CurrentPath);
+            List<FileProp> filesInFolder = new List<FileProp>();
+            foreach (string file in files)
+            {
+                filesInFolder.Add(new FileProp()
+                {
+                    Name = _vm.ConvertPathToName(file),
+                    Created = _vm.GetCreationTime(file),
+                    Size = _vm.GetFileSize(file),
+                });
+            }
+
+            FileList.ItemsSource = filesInFolder;
         }
     }
 }

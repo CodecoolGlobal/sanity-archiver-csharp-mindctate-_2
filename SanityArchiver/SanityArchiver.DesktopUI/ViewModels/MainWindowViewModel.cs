@@ -4,19 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using SanityArchiver.Application.Models;
 
 namespace SanityArchiver.DesktopUI.ViewModels
 {
 #pragma warning disable SA1600 // Elements should be documented
     public class MainWindowViewModel
     {
-        private static List<FileInfo> _files;
+        private static string[] _fileNames;
         private static List<string> _directories = new List<string>();
         private static List<string> _drives = new List<string>();
-        private string _fullPath;
+        private string[] _splittedPath;
 
         public string FullPath { get; set; }
+
+        public string CurrentPath { get; set; }
 
         public List<string> Drives
         {
@@ -85,6 +86,32 @@ namespace SanityArchiver.DesktopUI.ViewModels
             }
 
             return path.Substring(lastIndex + 1);
+        }
+
+        public string[] GetFileNames(string path)
+        {
+            string[] files = Directory.GetFiles(path);
+            return files;
+        }
+
+        public string GetCreationTime(string fileName)
+            {
+            DateTime creation = File.GetCreationTime(fileName);
+
+            return creation.ToString();
+            }
+
+        public string GetFileSize(string fileName)
+        {
+            FileInfo fi = new FileInfo(fileName);
+
+            return (fi.Length / (1024 * 1024)).ToString() + " MB";
+        }
+
+        public string ConvertPathToName(string path)
+        {
+            _splittedPath = path.Split('\\');
+            return _splittedPath[_splittedPath.Length - 1];
         }
     }
 #pragma warning restore SA1600 // Elements should be documented
