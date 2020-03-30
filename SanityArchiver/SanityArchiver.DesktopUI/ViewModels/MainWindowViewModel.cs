@@ -104,8 +104,24 @@ namespace SanityArchiver.DesktopUI.ViewModels
         public string GetFileSize(string fileName)
         {
             FileInfo fi = new FileInfo(fileName);
+            if (fi.Length > 0 && fi.Length < 1024)
+            {
+                return (fi.Length + " B").ToString();
+            }
+            else if (fi.Length >= 1024 && fi.Length < (1024 * 1024))
+            {
+                return ((fi.Length / 1024) + " KB").ToString();
+            }
+            else if (fi.Length >= (1024 * 1024) && fi.Length < (1024 * 1024 * 1024))
+            {
+                return ((fi.Length / (1024 * 1024)) + " MB").ToString();
+            }
+            else if (fi.Length >= (1024 * 1024 * 1024))
+            {
+                return ((fi.Length / (1024 * 1024 * 1024)) + " GB").ToString();
+            }
 
-            return (fi.Length / (1024 * 1024)).ToString() + " MB";
+            return "0 B";
         }
 
         public string ConvertPathToName(string path)
