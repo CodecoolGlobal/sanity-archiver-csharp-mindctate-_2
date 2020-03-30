@@ -5,8 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SanityArchiver.DesktopUI"
         mc:Ignorable="d"
-        Title="Sanity Archiver" Height="450" Width="800">
+        Title="Sanity Archiver" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="4*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="9*" />
+        </Grid.RowDefinitions>
+        <TreeView Grid.Row="1" x:Name="FolderView" TreeViewItem.Selected="GetItemTag">
+            <TreeView.Resources>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <EventSetter Event="MouseDoubleClick" Handler="OnItemMouseDoubleClick"/>
+                        <Setter Property="HeaderTemplate">
+                            <Setter.Value>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </Setter.Value>
+                        </Setter>
+                </Style>
+            </TreeView.Resources>
+        </TreeView>
+        <ListView Name="FileList" Grid.Column="1" HorizontalAlignment="Left" Height="368" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Top" Width="614">
+            <ListView.View>
+                <GridView>
+                    <GridView.Columns>
+                        <GridViewColumn Header="File Name" Width="200" DisplayMemberBinding="{Binding Name}" />
+                        <GridViewColumn Header="Created" Width="100" DisplayMemberBinding="{Binding Created}"/>
+                        <GridViewColumn Header="Size" Width="50" DisplayMemberBinding="{Binding Size}"/>
+                    </GridView.Columns>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+
     </Grid>
 </Window>
