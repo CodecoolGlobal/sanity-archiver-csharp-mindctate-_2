@@ -13,11 +13,15 @@ namespace SanityArchiver.DesktopUI.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Fields
+        private readonly MainWindowViewModel _vm;
+        #endregion
+
+        #region MainWindow
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
         /// </summary>
-        private readonly MainWindowViewModel _vm;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -25,7 +29,15 @@ namespace SanityArchiver.DesktopUI.Views
             _vm = new MainWindowViewModel();
             DataContext = _vm;
         }
+        #endregion
 
+        #region Event Handlers
+
+        /// <summary>
+        /// When the program starts, shows the computer's drives.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _vm.GetDrives();
@@ -44,6 +56,11 @@ namespace SanityArchiver.DesktopUI.Views
             }
         }
 
+        /// <summary>
+        /// When a drive or folder is expanded, shows it's subfolders.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FolderExpanded(object sender, RoutedEventArgs e)
         {
             var item = (TreeViewItem)sender;
@@ -74,6 +91,11 @@ namespace SanityArchiver.DesktopUI.Views
             }
         }
 
+        /// <summary>
+        /// Returns the selected TreeViewItem.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GetItemTag(object sender, RoutedEventArgs e)
         {
             TreeViewItem selectedItem = (TreeViewItem)FolderView.SelectedItem;
@@ -81,6 +103,11 @@ namespace SanityArchiver.DesktopUI.Views
             _vm.CurrentPath = selectedItem.Tag.ToString();
         }
 
+        /// <summary>
+        /// Returns the selected folder and fill the itemSource with it's files.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void OnItemMouseDoubleClick(object sender, MouseButtonEventArgs args)
         {
             if (sender is TreeViewItem)
@@ -105,5 +132,6 @@ namespace SanityArchiver.DesktopUI.Views
 
             FileList.ItemsSource = filesInFolder;
         }
+        #endregion
     }
 }

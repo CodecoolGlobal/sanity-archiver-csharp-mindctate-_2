@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace SanityArchiver.Application.Models
 {
-#pragma warning disable SA1600 // Elements should be documented
+    /// <summary>
+    /// Contains the neccessary information about the files
+    /// </summary>
     public class FileProp
     {
+        #region Getters and Setters
         public string Name { get; set; }
 
         public string Created { get; set; }
@@ -18,6 +21,6 @@ namespace SanityArchiver.Application.Models
         public bool IsHidden { get; set; }
 
         public string Extension { get; set; }
+        #endregion
     }
-#pragma warning restore SA1600 // Elements should be documented
 }
