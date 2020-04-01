@@ -132,6 +132,13 @@ namespace SanityArchiver.DesktopUI.Views
 
             FileList.ItemsSource = filesInFolder;
         }
+
+        private void FileList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ChangeAttributes window = new ChangeAttributes();
+
+            window.Show();
+        }
         #endregion
     }
 }

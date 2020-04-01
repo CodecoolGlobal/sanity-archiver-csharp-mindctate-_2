@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.IO;
 
 namespace SanityArchiver.DesktopUI.Views
 {
@@ -19,9 +20,22 @@ namespace SanityArchiver.DesktopUI.Views
     /// </summary>
     public partial class ChangeAttributes : Window
     {
+        #region Getters and Setters
+        public string FileName { get; set; }
+
+        public string Extension { get; set; }
+
+        public bool IsHidden { get; set; }
+        #endregion
+
         public ChangeAttributes()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

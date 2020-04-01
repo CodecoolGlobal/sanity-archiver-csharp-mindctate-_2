@@ -32,7 +32,10 @@
                 </Style>
             </TreeView.Resources>
         </TreeView>
-        <ListView Name="FileList" Grid.Column="1" HorizontalAlignment="Left" Height="368" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Top" Width="614">
+        <ListView Name="FileList" Grid.Column="1" HorizontalAlignment="Left"
+                  Height="368" Margin="10,0,0,0" Grid.Row="1"
+                  VerticalAlignment="Top" Width="614"
+                  MouseDoubleClick="FileList_MouseDoubleClick">
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
