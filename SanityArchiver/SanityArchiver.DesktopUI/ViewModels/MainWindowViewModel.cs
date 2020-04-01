@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using SanityArchiver.Application.Models;
 
 namespace SanityArchiver.DesktopUI.ViewModels
 {
@@ -13,16 +14,25 @@ namespace SanityArchiver.DesktopUI.ViewModels
     public class MainWindowViewModel
     {
         #region Fields
-        private static string[] _fileNames;
         private static List<string> _directories = new List<string>();
         private static List<string> _drives = new List<string>();
         private string[] _splittedPath;
+        private List<FileProp> _selectedFiles;
+
         #endregion
 
         #region Getters and Setters
+        public CopyType CopyOrMove { get; set; }
+
         public string FullPath { get; set; }
 
         public string CurrentPath { get; set; }
+
+        public List<FileProp> SelectedFiles
+        {
+            get { return _selectedFiles; }
+            set { _selectedFiles = value; }
+        }
 
         public List<string> Drives
         {
@@ -78,12 +88,14 @@ namespace SanityArchiver.DesktopUI.ViewModels
                 }
                 catch (UnauthorizedAccessException e)
                 {
+                    Console.WriteLine(e.Message);
                 }
 
                 return null;
             }
-            catch (IOException e)
+            catch (IOException iox)
             {
+                Console.WriteLine(iox.Message);
                 return null;
             }
         }
@@ -175,6 +187,33 @@ namespace SanityArchiver.DesktopUI.ViewModels
         {
             _splittedPath = path.Split('\\');
             return _splittedPath[_splittedPath.Length - 1];
+        }
+
+        public void PasteSelectedFiles(List<FileProp> selectedFiles, string destinationPath)
+        {
+            try
+            {
+                if (CopyOrMove == CopyType.Copy)
+                {
+                    foreach (var file in selectedFiles)
+                    {
+                        File.Copy(file.FilePath, destinationPath + "\\" + file.Name, true);
+                    }
+                }
+                else if (CopyOrMove == CopyType.Move)
+                {
+                    foreach (var file in selectedFiles)
+                    {
+                        File.Move(file.FilePath, destinationPath + "\\" + file.Name);
+                    }
+                }
+            }
+            catch (IOException iox)
+            {
+                Console.WriteLine(iox.Message);
+            }
+
+            SelectedFiles.Clear();
         }
         #endregion
     }
