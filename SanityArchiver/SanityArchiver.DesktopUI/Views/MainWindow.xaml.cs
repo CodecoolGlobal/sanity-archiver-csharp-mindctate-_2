@@ -175,6 +175,7 @@ namespace SanityArchiver.DesktopUI.Views
         private void ClickPaste(object sender, RoutedEventArgs e)
         {
             _vm.PasteSelectedFiles(_vm.SelectedFiles, _vm.CurrentPath);
+            OnItemMouseDoubleClick(null, null);
             btnPaste.IsEnabled = false;
         }
     }
