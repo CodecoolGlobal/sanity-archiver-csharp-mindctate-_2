@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.IO.Compression;
+using SanityArchiver.Application.Models;
 
 namespace SanityArchiver.DesktopUI.ViewModels
 {
@@ -20,6 +22,11 @@ namespace SanityArchiver.DesktopUI.ViewModels
         #endregion
 
         #region Getters and Setters
+
+        public List<FileProp> SelectedFiles { get; set; }
+
+        public CopyType CopyOrMove { get; set; }
+
         public string FullPath { get; set; }
 
         public string CurrentPath { get; set; }
@@ -146,24 +153,8 @@ namespace SanityArchiver.DesktopUI.ViewModels
         public string GetFileSize(string fileName)
         {
             FileInfo fi = new FileInfo(fileName);
-            if (fi.Length > 0 && fi.Length < 1024)
-            {
-                return (fi.Length + " B").ToString();
-            }
-            else if (fi.Length >= 1024 && fi.Length < (1024 * 1024))
-            {
-                return ((fi.Length / 1024) + " KB").ToString();
-            }
-            else if (fi.Length >= (1024 * 1024) && fi.Length < (1024 * 1024 * 1024))
-            {
-                return ((fi.Length / (1024 * 1024)) + " MB").ToString();
-            }
-            else if (fi.Length >= (1024 * 1024 * 1024))
-            {
-                return ((fi.Length / (1024 * 1024 * 1024)) + " GB").ToString();
-            }
 
-            return "0 B";
+            return ConvertSize(fi.Length);
         }
 
         /// <summary>
@@ -175,6 +166,80 @@ namespace SanityArchiver.DesktopUI.ViewModels
         {
             _splittedPath = path.Split('\\');
             return _splittedPath[_splittedPath.Length - 1];
+        }
+
+        public void PasteSelectedFiles(List<FileProp> selectedFiles, string destinationPath)
+        {
+            try
+            {
+                if (CopyOrMove == CopyType.Copy)
+                {
+                    foreach (var file in selectedFiles)
+                    {
+                        File.Copy(file.FilePath, destinationPath + "\\" + file.Name, true);
+                    }
+                }
+                else if (CopyOrMove == CopyType.Move)
+                {
+                    foreach (var file in selectedFiles)
+                    {
+                        File.Move(file.FilePath, destinationPath + "\\" + file.Name);
+                    }
+                }
+            }
+            catch (IOException iox)
+            {
+                Console.WriteLine(iox.Message);
+            }
+
+            SelectedFiles.Clear();
+        }
+
+        public void ZipMultiFiles(string dir, List<FileProp> files)
+        {
+        }
+
+        public string GetDirectorySize(string path)
+        {
+            try
+            {
+                string[] filesInFolder = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
+                long size = 0;
+                foreach (string file in filesInFolder)
+                {
+                    FileInfo info = new FileInfo(file);
+                    size += info.Length;
+                }
+
+                return ConvertSize(size);
+            }
+            catch (UnauthorizedAccessException uae)
+            {
+                Console.WriteLine(uae.Message);
+                return null;
+            }
+        }
+
+        public string ConvertSize(long size)
+        {
+            if (size > 0 && size < 1024)
+            {
+                return (size + " B").ToString();
+            }
+            else if (size >= 1024 && size < (1024 * 1024))
+            {
+                return ((size / 1024) + " KB").ToString();
+            }
+            else if (size >= (1024 * 1024) && size < (1024 * 1024 * 1024))
+            {
+                return ((size / (1024 * 1024)) + " MB").ToString();
+            }
+            else if (size >= (1024 * 1024 * 1024))
+            {
+                return ((size / (1024 * 1024 * 1024)) + " GB").ToString();
+            }
+
+            return size.ToString();
         }
         #endregion
     }
