@@ -22,7 +22,6 @@ namespace SanityArchiver.DesktopUI.ViewModels
         #endregion
 
         #region Getters and Setters
-
         public List<FileProp> SelectedFiles { get; set; }
 
         public CopyType CopyOrMove { get; set; }
@@ -61,7 +60,7 @@ namespace SanityArchiver.DesktopUI.ViewModels
         }
         #endregion
 
-        #region Dictionary Methods
+        #region Directory Methods
 
         /// <summary>
         /// Get all subdirectories a drive or directory has.
@@ -139,11 +138,11 @@ namespace SanityArchiver.DesktopUI.ViewModels
         /// <param name="fileName"></param>
         /// <returns>creation time of the file</returns>
         public string GetCreationTime(string fileName)
-            {
+        {
             DateTime creation = File.GetCreationTime(fileName);
 
             return creation.ToString();
-            }
+        }
 
         /// <summary>
         /// Get the size of a file.
@@ -157,6 +156,19 @@ namespace SanityArchiver.DesktopUI.ViewModels
             return ConvertSize(fi.Length);
         }
 
+        public string GetExtension(string file)
+        {
+            string[] splittedFile = file.Split('.');
+            return splittedFile[splittedFile.Length - 1];
+        }
+
+        public bool GetFileVisibility(string file)
+        {
+            FileInfo fileInfo = new FileInfo(file);
+
+            return fileInfo.Attributes.HasFlag(FileAttributes.Hidden);
+        }
+
         /// <summary>
         /// Remove the path from the file's name and give back only the last part of it.
         /// </summary>
@@ -165,7 +177,8 @@ namespace SanityArchiver.DesktopUI.ViewModels
         public string ConvertPathToName(string path)
         {
             _splittedPath = path.Split('\\');
-            return _splittedPath[_splittedPath.Length - 1];
+            string[] nameWithoutExtension = _splittedPath[_splittedPath.Length - 1].Split('.');
+            return nameWithoutExtension[0];
         }
 
         public void PasteSelectedFiles(List<FileProp> selectedFiles, string destinationPath)
@@ -240,6 +253,41 @@ namespace SanityArchiver.DesktopUI.ViewModels
             }
 
             return size.ToString();
+        }
+
+        public FileAttributes RemoveAttribute(FileAttributes attributes, FileAttributes attributesToRemove)
+        {
+            return attributes & ~attributesToRemove;
+        }
+
+        public void ChangeAttributes(string file, string fileName, string extension, bool isHidden)
+        {
+            FileInfo fileInfo = new FileInfo(file);
+            /*string oldFile = string.Empty;
+
+            foreach (var item in SelectedFiles)
+            {
+                oldFile = item.FilePath + "\\" + item.Name + "." + item.Extension;
+            }*/
+
+            //fileInfo.MoveTo(file);
+            /*if (!fileInfo.Exists)
+            {
+                fileInfo.MoveTo(file);
+            }
+
+            Path.ChangeExtension(file, extension);*/
+            FileAttributes attributes = File.GetAttributes(file);
+            if (isHidden)
+            {
+                File.SetAttributes(file, FileAttributes.Hidden);
+            }
+            else
+            {
+                attributes = RemoveAttribute(attributes, FileAttributes.Hidden);
+                File.SetAttributes(file, attributes);
+            }
+
         }
         #endregion
     }

@@ -130,6 +130,8 @@ namespace SanityArchiver.DesktopUI.Views
                     Name = _vm.ConvertPathToName(file),
                     Created = _vm.GetCreationTime(file),
                     Size = _vm.GetFileSize(file),
+                    Extension = _vm.GetExtension(file),
+                    IsHidden = _vm.GetFileVisibility(file),
                 });
             }
 
@@ -139,6 +141,15 @@ namespace SanityArchiver.DesktopUI.Views
         private void FileList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             ChangeAttributes window = new ChangeAttributes();
+            foreach (var file in _vm.SelectedFiles)
+            {
+                window.CurrentDirectory = _vm.CurrentPath;
+                window.FilePath = file.FilePath + "\\" + file.Name + "." + file.Extension;
+                window.txtName.Text = file.Name;
+                window.txtExtension.Text = file.Extension;
+                window.chkIsHidden.IsChecked = file.IsHidden;
+            }
+
             window.Show();
         }
         #endregion
