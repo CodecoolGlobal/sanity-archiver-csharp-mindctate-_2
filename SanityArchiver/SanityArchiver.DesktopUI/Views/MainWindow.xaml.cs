@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Input;
 using SanityArchiver.DesktopUI.ViewModels;
 using SanityArchiver.Application.Models;
@@ -101,6 +102,7 @@ namespace SanityArchiver.DesktopUI.Views
             TreeViewItem selectedItem = (TreeViewItem)FolderView.SelectedItem;
 
             _vm.CurrentPath = selectedItem.Tag.ToString();
+            lblFolderSize.Content = $"The folder size is: {_vm.GetDirectorySize(_vm.CurrentPath)}";
         }
 
         /// <summary>
@@ -124,6 +126,7 @@ namespace SanityArchiver.DesktopUI.Views
             {
                 filesInFolder.Add(new FileProp()
                 {
+                    FilePath = file,
                     Name = _vm.ConvertPathToName(file),
                     Created = _vm.GetCreationTime(file),
                     Size = _vm.GetFileSize(file),
@@ -139,5 +142,49 @@ namespace SanityArchiver.DesktopUI.Views
             window.Show();
         }
         #endregion
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _vm.SelectedFiles = FileList.SelectedItems
+                .Cast<FileProp>()
+                .ToList();
+
+            EnableCopyMovePaste(_vm.SelectedFiles);
+        }
+
+        private void EnableCopyMovePaste(List<FileProp> selectedFiles)
+        {
+            if (selectedFiles.Count > 0)
+            {
+                btnMove.IsEnabled = true;
+                btnCopy.IsEnabled = true;
+                btnCompress.IsEnabled = true;
+            }
+            else
+            {
+                btnMove.IsEnabled = false;
+                btnCopy.IsEnabled = false;
+                btnPaste.IsEnabled = false;
+                btnCompress.IsEnabled = false;
+            }
+        }
+
+        private void ClickCopy(object sender, RoutedEventArgs e)
+        {
+            _vm.CopyOrMove = CopyType.Copy;
+            btnPaste.IsEnabled = true;
+        }
+
+        private void ClickMove(object sender, RoutedEventArgs e)
+        {
+            _vm.CopyOrMove = CopyType.Move;
+            btnPaste.IsEnabled = true;
+        }
+
+        private void ClickPaste(object sender, RoutedEventArgs e)
+        {
+            _vm.PasteSelectedFiles(_vm.SelectedFiles, _vm.CurrentPath);
+            OnItemMouseDoubleClick(null, null);
+            btnPaste.IsEnabled = false;
+        }
     }
 }

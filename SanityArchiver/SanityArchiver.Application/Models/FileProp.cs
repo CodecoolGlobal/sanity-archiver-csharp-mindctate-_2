@@ -12,6 +12,8 @@ namespace SanityArchiver.Application.Models
     public class FileProp
     {
         #region Getters and Setters
+        public string FilePath { get; set; }
+
         public string Name { get; set; }
 
         public string Created { get; set; }
