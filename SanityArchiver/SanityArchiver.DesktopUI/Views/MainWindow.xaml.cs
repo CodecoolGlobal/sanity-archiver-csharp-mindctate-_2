@@ -142,6 +142,7 @@ namespace SanityArchiver.DesktopUI.Views
             window.Show();
         }
         #endregion
+
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _vm.SelectedFiles = FileList.SelectedItems
