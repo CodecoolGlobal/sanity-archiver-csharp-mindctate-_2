@@ -136,7 +136,6 @@ namespace SanityArchiver.DesktopUI.Views
         private void FileList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             ChangeAttributes window = new ChangeAttributes();
-            
             window.Show();
         }
         #endregion
