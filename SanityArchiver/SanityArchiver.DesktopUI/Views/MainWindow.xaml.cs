@@ -126,6 +126,7 @@ namespace SanityArchiver.DesktopUI.Views
             {
                 filesInFolder.Add(new FileProp()
                 {
+                    FilePath = file,
                     Name = _vm.ConvertPathToName(file),
                     Created = _vm.GetCreationTime(file),
                     Size = _vm.GetFileSize(file),
