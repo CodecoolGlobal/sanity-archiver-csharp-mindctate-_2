@@ -208,9 +208,10 @@ namespace SanityArchiver.DesktopUI.ViewModels
             SelectedFiles.Clear();
         }
 
-        public void ZipMultiFiles(string dir, List<FileProp> files)
+        /*public void ZipMultiFiles(string dir, List<FileProp> files)
         {
         }
+        */
 
         public string GetDirectorySize(string path)
         {
