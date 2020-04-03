@@ -197,6 +197,18 @@ namespace SanityArchiver.DesktopUI.Views
             _vm.PasteSelectedFiles(_vm.SelectedFiles, _vm.CurrentPath);
             OnItemMouseDoubleClick(null, null);
             btnPaste.IsEnabled = false;
+            chkSelectAll.IsChecked = false;
+        }
+
+        private void ChkSelectAll_Checked(object sender, RoutedEventArgs e)
+        {
+            FileList.SelectAll();
+        }
+
+        private void ChkSelectAll_Unchecked(object sender, RoutedEventArgs e)
+        {
+            FileList.SelectedItems.Clear();
+            chkSelectAll.IsChecked = false;
         }
     }
 }

@@ -44,12 +44,15 @@
                 <GridView>
                     <GridView.Columns>
                         <GridViewColumn>
-                            <CheckBox>
+                            <CheckBox x:Name="chkSelectAll" 
+                                      Checked="ChkSelectAll_Checked" 
+                                      Unchecked="ChkSelectAll_Unchecked"  
+                                      IsThreeState="False">
 
                             </CheckBox>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}},
+                                    <CheckBox x:Name="chkSelect" IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}},
                                                           Path=IsSelected,Mode=TwoWay}">
 
                                     </CheckBox>
